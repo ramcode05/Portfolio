@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe Player Interface &amp; Specs | Shriram Reddy</title>
+    <meta name="description"
+        content="Interface walkthrough, specifications, and layout screenshots of Vibe Player desktop music application by Shriram Reddy.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* Subpage-specific styling override/enhancement */
+        .vibe-hero {
+            padding: 40px 0 20px 0;
+            border-bottom: var(--border-thin);
+            text-align: left;
+        }
+
+        .vibe-hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--ff-mono);
+            font-size: 11px;
+            font-weight: 700;
+            border: var(--border-thin);
+            background-color: var(--bg-card);
+            padding: 6px 16px;
+            border-radius: 30px;
+            margin-bottom: 20px;
+        }
+
+        .vibe-hero h1 {
+            font-size: 64px;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .vibe-hero p {
+            font-size: 18px;
+            max-width: 800px;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+
+        .layout-editorial-split {
+            display: grid;
+            grid-template-columns: 0.95fr 1.05fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        /* Interactive Showcase Controller */
+        .vibe-showcase-card {
+            background-color: var(--bg-card);
+            border: var(--border-thin);
+            padding: 24px;
+            box-shadow: 6px 6px 0 var(--border-color);
+            margin-bottom: 30px;
+            border-radius: 6px;
+        }
+
+        .vibe-tabs-container {
+            display: flex;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 20px;
+            gap: 4px;
+        }
+
+        .vibe-tab-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 14px 8px;
+            font-family: var(--ff-head);
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            border-bottom: 4px solid transparent;
+            transition: var(--transition-fast);
+            letter-spacing: 0.05em;
+        }
+
+        .vibe-tab-btn:hover {
+            color: var(--accent-orange);
+        }
+
+        .vibe-tab-btn.active {
+            color: var(--accent-orange);
+            border-bottom-color: var(--accent-orange);
+        }
+
+        .showcase-display {
+            border: var(--border-thin);
+            overflow: hidden;
+            background-color: #121212;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .showcase-display img {
+            width: 100%;
+            height: auto;
+            display: block;
+            opacity: 1;
+            transition: opacity 0.25s ease-in-out;
+        }
+
+        .showcase-info {
+            font-size: 14px;
+            line-height: 1.6;
+            background-color: rgba(18, 18, 18, 0.03);
+            padding: 20px;
+            border-left: 5px solid var(--accent-orange);
+            border-radius: 4px;
+            min-height: 110px;
+        }
+
+        .showcase-info h4 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .showcase-info p {
+            margin: 0;
+            color: var(--text-secondary);
+        }
+
+        /* Tech Details Block */
+        .tech-spec-card {
+            background-color: var(--bg-card);
+            border: var(--border-thin);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .tech-spec-card h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px dashed rgba(18, 18, 18, 0.15);
+            padding-bottom: 10px;
+        }
+
+        .specs-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .spec-item {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            font-size: 14px;
+            border-bottom: 1px solid rgba(18, 18, 18, 0.1);
+            padding-bottom: 12px;
+        }
+
+        .spec-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .spec-label {
+            font-family: var(--ff-mono);
+            font-weight: 700;
+            color: var(--accent-orange);
+        }
+
+        .spec-value {
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .highlight-card {
+            background-color: var(--bg-card);
+            border: var(--border-thin);
+            padding: 30px;
+            border-left: 6px solid var(--accent-orange);
+            box-shadow: 4px 4px 0 var(--border-color);
+        }
+
+        .highlight-card h4 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .highlight-card p {
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .highlight-card ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .highlight-card li {
+            margin-bottom: 8px;
+            font-size: 13.5px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            line-height: 1.5;
+        }
+
+        .highlight-card li i {
+            color: var(--accent-orange);
+            margin-top: 4px;
+        }
+
+        @media (max-width: 992px) {
+            .layout-editorial-split {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .vibe-hero h1 {
+                font-size: 44px;
+            }
+        }
+    </style>
+</head>
+
+<body class="neo-brutalist">
+
+    <!-- Grid Data Pipelines Canvas -->
+    <canvas id="gridPipelines"></canvas>
+
+    <!-- Top Coordinates & Welcome Bar -->
+    <div class="top-info-bar">
+        <span class="info-welcome">WELCOME TO SHRIRAM REDDY'S _ ENGINEERING PORTFOLIO</span>
+        <span class="info-contact">SYSTEM REGISTRY: VIBE PLAYER APP PAGE</span>
+    </div>
+
+    <!-- Main Navigation Header -->
+    <header class="neo-header">
+        <div class="header-inner">
+            <a href="index.html#hero" class="brand-logo">
+                <span class="logo-box">SHRIRAM</span><span>REDDY_</span>
+            </a>
+
+            <nav class="neo-nav" id="navMenu">
+                <ul>
+                    <li><a href="index.html#hero" class="nav-item">HOME</a></li>
+                    <li><a href="index.html#skills" class="nav-item">SKILLS</a></li>
+                    <li><a href="index.html#projects" class="nav-item active">ECOSYSTEM</a></li>
+                    <li><a href="index.html#journey" class="nav-item">JOURNEY</a></li>
+                    <li><a href="index.html#contact" class="nav-item">CONTACT</a></li>
+                </ul>
+            </nav>
+
+            <div class="header-right-meta">
+                <div class="theme-switcher-hint">
+                    <svg class="hint-arrow" viewBox="0 0 50 30" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M40 25 C 25 25, 15 15, 12 8" />
+                        <path d="M20 8 L11 7 L13 16" />
+                    </svg>
+                    <div class="hint-box">Change Theme!</div>
+                </div>
+                <div class="theme-switcher">
+                    <button class="theme-btn theme-btn-orange active" data-theme="orange" title="Orange Theme"></button>
+                    <button class="theme-btn theme-btn-red" data-theme="red" title="Red Theme"></button>
+                    <button class="theme-btn theme-btn-white" data-theme="white" title="Monochrome Theme"></button>
+                    <button class="theme-btn theme-btn-brown" data-theme="brown" title="Coffee Brown Theme"></button>
+                </div>
+                <span class="meta-lang">ENG <i class="fa-solid fa-angle-down"></i></span>
+                <span class="meta-code-symbol">&gt;/<span class="cursor-blink">&lt;</span></span>
+            </div>
+
+            <button class="nav-hamburger" id="navToggle" aria-label="Toggle Navigation Menu">
+                <span class="burger-bar"></span>
+                <span class="burger-bar"></span>
+                <span class="burger-bar"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="page-container">
+
+        <!-- Vibe Player Header Section -->
+        <section class="vibe-hero scroll-reveal visible">
+            <div class="vibe-hero-badge">
+                <i class="fa-solid fa-compact-disc"></i> SYSTEM REGISTRY NO. 889-V
+            </div>
+            <h1>Vibe Player Desktop<br>Music Application</h1>
+            <p>A premium, desktop offline music library and converter application built with Electron and Node.js. Incorporating glassmorphic visual layouts, local directory metadata audio indexing, and active YouTube download APIs.</p>
+            <a href="index.html#projects" class="btn-neo btn-black"><i class="fa-solid fa-arrow-left"></i> Return to Portfolio</a>
+        </section>
+
+        <!-- Main Content Layout Split -->
+        <div class="section-box scroll-reveal">
+            <div class="layout-editorial-split">
+                
+                <!-- Left Column: Explanations & Tech Specs -->
+                <div class="vibe-details-left">
+                    <div class="section-badge-header" style="margin-bottom: 24px;">
+                        <span class="badge-num">01</span>
+                        <h2>Technical Architecture &amp; System Specs</h2>
+                    </div>
+                    
+                    <div class="highlight-card" style="margin-bottom: 30px;">
+                        <h4>The Audio Core Concept</h4>
+                        <p>Vibe Player was engineered to bridge the gap between locally archived audio collections and web-based media streams, featuring a fully sandboxed offline-first architecture.</p>
+                        
+                        <ul>
+                            <li>
+                                <i class="fa-solid fa-circle-check"></i>
+                                <div>
+                                    <strong>Offline Metadata Indexing:</strong> Scans target directories recursively, reading binary audio packets (ID3 tags) to dynamically compile track titles, artist details, and album art without external web calls.
+                                </div>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-circle-check"></i>
+                                <div>
+                                    <strong>Integrated Converter:</strong> Integrates custom scripting hooks mapping to <code>yt-dlp</code> and <code>ytdl-core</code>, downloading YouTube audio streams directly into the local directory.
+                                </div>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-circle-check"></i>
+                                <div>
+                                    <strong>Equalizer Engine:</strong> Features a custom frequency tuning equalizer controlling multi-band sound models for tailored auditory profiles.
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="tech-spec-card">
+                        <h3>Development Specifications</h3>
+                        <div class="specs-list">
+                            <div class="spec-item">
+                                <span class="spec-label">Environment</span>
+                                <span class="spec-value">Electron Framework (Chromium + Node.js Context Isolation)</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Audio Libraries</span>
+                                <span class="spec-value">HTML5 Audio API, Howler.js, music-metadata-browser</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Downloader Engine</span>
+                                <span class="spec-value">yt-dlp Python binaries, node-ytdl-core pipelines</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Design Styling</span>
+                                <span class="spec-value">Glassmorphism UI, Vanilla CSS variables, high-res SVG canvas widgets</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Platform Core</span>
+                                <span class="spec-value">Cross-Platform compatible (Windows EXE, macOS DMG, Linux AppImage)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Interactive App Interface Showcase -->
+                <div class="vibe-details-right">
+                    <div class="section-badge-header" style="margin-bottom: 24px;">
+                        <span class="badge-num">02</span>
+                        <h2>Interactive Interface Walkthrough</h2>
+                    </div>
+
+                    <p style="margin-bottom: 20px; font-size: 14px;">Explore high-fidelity layout captures demonstrating the primary pages of the Vibe Player application. Click the tabs below to toggle the screens:</p>
+
+                    <!-- Interactive Showcase Box -->
+                    <div class="vibe-showcase-card">
+                        <!-- Navigation Tabs -->
+                        <div class="vibe-tabs-container" id="showcaseTabs">
+                            <button class="vibe-tab-btn active" data-target="library">Library</button>
+                            <button class="vibe-tab-btn" data-target="playlists">Playlists</button>
+                            <button class="vibe-tab-btn" data-target="downloader">Downloader</button>
+                            <button class="vibe-tab-btn" data-target="settings">Settings</button>
+                        </div>
+
+                        <!-- Image display screen -->
+                        <div class="showcase-display">
+                            <img id="showcaseImage" src="images/vibe_library.png" alt="Vibe Player Library Screen">
+                        </div>
+
+                        <!-- Caption details block -->
+                        <div class="showcase-info" id="showcaseCaption">
+                            <h4>Offline Music Library</h4>
+                            <p>The central library lists all local audio files parsed from indexing directories. It features instantaneous title/artist search, sorting, and high-fidelity album art rendering, modeled after classic vinyl record aesthetics.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="neo-footer">
+        <div class="footer-inner">
+            <p>&copy; 2026 Shriram Reddy. All rights reserved.</p>
+            <p class="footer-motto">CURIOUS MIND // SECURE INFRASTRUCTURE</p>
+        </div>
+    </footer>
+
+    <!-- Custom Follow-Along Cursor -->
+    <div class="custom-cursor-circle" id="customCursorCircle">
+        <div class="cursor-circle-inner"></div>
+    </div>
+    <div class="custom-cursor-dot" id="customCursorDot">
+        <div class="cursor-dot-inner"></div>
+    </div>
+
+    <!-- Custom Script -->
+    <script src="script.js"></script>
+
+    <!-- Page Specific Script for Interactive Showcase -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const tabs = document.querySelectorAll(".vibe-tab-btn");
+            const displayImg = document.getElementById("showcaseImage");
+            const captionBox = document.getElementById("showcaseCaption");
+
+            // Dataset mapping tabs to images and detailed textual captions
+            const tabData = {
+                library: {
+                    src: "images/vibe_library.png",
+                    title: "Offline Music Library",
+                    text: "The central library lists all local audio files parsed from indexing directories. It features instantaneous title/artist search, sorting, and high-fidelity album art rendering, modeled after classic vinyl record aesthetics."
+                },
+                playlists: {
+                    src: "images/vibe_playlists.png",
+                    title: "Custom Compilations",
+                    text: "Custom compilations section allows users to create, modify, and manage custom audio sequences. Perfect for grouping tracks locally without copying files on disk."
+                },
+                downloader: {
+                    src: "images/vibe_downloader.png",
+                    title: "YouTube Converter Downloader",
+                    text: "The integrated YouTube converter downloads remote media streams directly via local backend scripts (running yt-dlp or ytdl-core hooks). It downloads audio files in high quality and automatically parses tags."
+                },
+                settings: {
+                    src: "images/vibe_settings.png",
+                    title: "Preferences & controls",
+                    text: "Preferences page lets the user customize the visual player accent colors (red, green, cyan, orange, purple, dark) and tune audio frequency bands with a built-in sound engine equalizer (flat, bass boost, treble boost, vocal boost, electronic)."
+                }
+            };
+
+            tabs.forEach(tab => {
+                tab.addEventListener("click", () => {
+                    const target = tab.getAttribute("data-target");
+                    if (!tabData[target]) return;
+
+                    // Update active button state
+                    tabs.forEach(t => t.classList.remove("active"));
+                    tab.classList.add("active");
+
+                    // Fade out transition
+                    displayImg.style.opacity = "0.1";
+
+                    setTimeout(() => {
+                        // Change image source and update caption content
+                        displayImg.src = tabData[target].src;
+                        displayImg.alt = `Vibe Player ${tabData[target].title} Screen`;
+                        captionBox.innerHTML = `
+                            <h4>${tabData[target].title}</h4>
+                            <p>${tabData[target].text}</p>
+                        `;
+                        // Fade in transition
+                        displayImg.style.opacity = "1";
+                    }, 250);
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

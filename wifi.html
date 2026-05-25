@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wi-Fi Toolkit Diagnostics &amp; Source | Shriram Reddy</title>
+    <meta name="description"
+        content="Technical analysis and source documentation for the Ultimate Wi-Fi Toolkit by Shriram Reddy. Featuring natural language processing and auto-correction engine.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* Subpage-specific styling override/enhancement */
+        .wifi-hero {
+            padding: 40px 0 20px 0;
+            border-bottom: var(--border-thin);
+            text-align: left;
+        }
+
+        .wifi-hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--ff-mono);
+            font-size: 11px;
+            font-weight: 700;
+            border: var(--border-thin);
+            background-color: var(--bg-card);
+            padding: 6px 16px;
+            border-radius: 30px;
+            margin-bottom: 20px;
+        }
+
+        .wifi-hero h1 {
+            font-size: 64px;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .wifi-hero p {
+            font-size: 18px;
+            max-width: 800px;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+
+        .layout-editorial-split {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        /* Mock Terminal Window */
+        .terminal-window {
+            background-color: #1e1e24;
+            border: var(--border-thin);
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 6px 6px 0 var(--border-color);
+            margin-top: 10px;
+        }
+
+        .terminal-header {
+            background-color: #121214;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: var(--border-thin);
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 8px;
+            margin-right: 16px;
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+        }
+
+        .dot-red { background-color: #ff5f56; }
+        .dot-yellow { background-color: #ffbd2e; }
+        .dot-green { background-color: #27c93f; }
+
+        .terminal-title {
+            font-family: var(--ff-mono);
+            font-size: 11px;
+            color: #8e8e93;
+            letter-spacing: 0.05em;
+        }
+
+        .terminal-body {
+            padding: 24px;
+            margin: 0;
+            overflow-x: auto;
+            max-height: 520px;
+            overflow-y: auto;
+            background-color: #16161a;
+        }
+
+        .terminal-body code {
+            font-family: var(--ff-mono);
+            font-size: 12.5px;
+            line-height: 1.6;
+            color: #d4d4d8;
+            display: block;
+            white-space: pre;
+        }
+
+        /* Basic syntax styling */
+        .code-keyword { color: #f472b6; font-weight: bold; }
+        .code-string { color: #a7f3d0; }
+        .code-comment { color: #71717a; font-style: italic; }
+        .code-fn { color: #93c5fd; }
+        .code-builtin { color: #fde047; }
+        .code-decorator { color: #fb923c; }
+
+        /* Commands Grid Table */
+        .cmd-table-card {
+            background-color: var(--bg-card);
+            border: var(--border-thin);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .cmd-table-card h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px dashed rgba(18, 18, 18, 0.15);
+            padding-bottom: 10px;
+        }
+
+        .cmd-table-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .cmd-row {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            border-bottom: 1px solid rgba(18, 18, 18, 0.1);
+            padding: 12px 0;
+            font-size: 14px;
+        }
+
+        .cmd-row:last-child {
+            border-bottom: none;
+        }
+
+        .cmd-name {
+            font-family: var(--ff-mono);
+            font-weight: 700;
+            color: var(--accent-orange);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cmd-desc {
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .highlight-card {
+            background-color: var(--bg-card);
+            border: var(--border-thin);
+            padding: 30px;
+            border-left: 6px solid var(--accent-orange);
+            box-shadow: 4px 4px 0 var(--border-color);
+        }
+
+        .highlight-card h4 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .highlight-card p {
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .highlight-card ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .highlight-card li {
+            margin-bottom: 8px;
+            font-size: 13.5px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            line-height: 1.5;
+        }
+
+        .highlight-card li i {
+            color: var(--accent-orange);
+            margin-top: 4px;
+        }
+
+        @media (max-width: 992px) {
+            .layout-editorial-split {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .wifi-hero h1 {
+                font-size: 44px;
+            }
+        }
+    </style>
+</head>
+
+<body class="neo-brutalist">
+
+    <!-- Grid Data Pipelines Canvas -->
+    <canvas id="gridPipelines"></canvas>
+
+    <!-- Top Coordinates & Welcome Bar -->
+    <div class="top-info-bar">
+        <span class="info-welcome">WELCOME TO SHRIRAM REDDY'S _ ENGINEERING PORTFOLIO</span>
+        <span class="info-contact">SYSTEM REGISTRY: WI-FI DIAGNOSTICS PAGE</span>
+    </div>
+
+    <!-- Main Navigation Header -->
+    <header class="neo-header">
+        <div class="header-inner">
+            <a href="index.html#hero" class="brand-logo">
+                <span class="logo-box">SHRIRAM</span><span>REDDY_</span>
+            </a>
+
+            <nav class="neo-nav" id="navMenu">
+                <ul>
+                    <li><a href="index.html#hero" class="nav-item">HOME</a></li>
+                    <li><a href="index.html#skills" class="nav-item">SKILLS</a></li>
+                    <li><a href="index.html#projects" class="nav-item active">ECOSYSTEM</a></li>
+                    <li><a href="index.html#journey" class="nav-item">JOURNEY</a></li>
+                    <li><a href="index.html#contact" class="nav-item">CONTACT</a></li>
+                </ul>
+            </nav>
+
+            <div class="header-right-meta">
+                <div class="theme-switcher-hint">
+                    <svg class="hint-arrow" viewBox="0 0 50 30" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M40 25 C 25 25, 15 15, 12 8" />
+                        <path d="M20 8 L11 7 L13 16" />
+                    </svg>
+                    <div class="hint-box">Change Theme!</div>
+                </div>
+                <div class="theme-switcher">
+                    <button class="theme-btn theme-btn-orange active" data-theme="orange" title="Orange Theme"></button>
+                    <button class="theme-btn theme-btn-red" data-theme="red" title="Red Theme"></button>
+                    <button class="theme-btn theme-btn-white" data-theme="white" title="Monochrome Theme"></button>
+                    <button class="theme-btn theme-btn-brown" data-theme="brown" title="Coffee Brown Theme"></button>
+                </div>
+                <span class="meta-lang">ENG <i class="fa-solid fa-angle-down"></i></span>
+                <span class="meta-code-symbol">&gt;/<span class="cursor-blink">&lt;</span></span>
+            </div>
+
+            <button class="nav-hamburger" id="navToggle" aria-label="Toggle Navigation Menu">
+                <span class="burger-bar"></span>
+                <span class="burger-bar"></span>
+                <span class="burger-bar"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="page-container">
+
+        <!-- Wi-Fi Toolkit Header Section -->
+        <section class="wifi-hero scroll-reveal visible">
+            <div class="wifi-hero-badge">
+                <i class="fa-solid fa-tower-broadcast"></i> SYSTEM REGISTRY NO. 112-B
+            </div>
+            <h1>Wi-Fi Toolkit &amp;<br>Local Network Auditor</h1>
+            <p>A standalone, zero-dependency network scanning, intrusion alert, and password extraction utility built in Python. Designed for local security audits, network optimization, and educational diagnostic simulation sweeps.</p>
+            <a href="index.html#projects" class="btn-neo btn-black"><i class="fa-solid fa-arrow-left"></i> Return to Portfolio</a>
+        </section>
+
+        <!-- Main Content Layout Split -->
+        <div class="section-box scroll-reveal">
+            <div class="layout-editorial-split">
+                
+                <!-- Left Column: Explanations & Capabilities -->
+                <div class="wifi-details-left">
+                    <div class="section-badge-header" style="margin-bottom: 24px;">
+                        <span class="badge-num">01</span>
+                        <h2>Fuzzy Matching &amp; Natural Language Parsing</h2>
+                    </div>
+                    
+                    <div class="highlight-card" style="margin-bottom: 30px;">
+                        <h4>The Best Feature: Intelligent Parsing</h4>
+                        <p>Unlike standard command-line tools that crash or fail on minor syntax deviations, this toolkit is engineered with an <strong>autonomous correction engine</strong>.</p>
+                        
+                        <ul>
+                            <li>
+                                <i class="fa-solid fa-circle-check"></i>
+                                <div>
+                                    <strong>Natural Language Input:</strong> Interacts using flexible phrasing like <code>find wifi</code>, <code>search ports</code>, or <code>who is connected</code> instead of rigid, hard-to-remember syntax codes.
+                                </div>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-circle-check"></i>
+                                <div>
+                                    <strong>Auto-Correction for Typos:</strong> Leverages mathematical string distance algorithms to verify inputs against a localized database, correcting typos in real-time for zero-interruption execution.
+                                </div>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-circle-check"></i>
+                                <div>
+                                    <strong>Synonym Normalization:</strong> Maps general vocabulary verbs like <i>locate</i>, <i>find</i>, <i>leaks</i>, and <i>probe</i> directly to their underlying Python system call commands.
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="cmd-table-card">
+                        <h3>Passive Audit Commands</h3>
+                        <div class="cmd-table-grid">
+                            <div class="cmd-row">
+                                <span class="cmd-name">> password</span>
+                                <span class="cmd-desc">Inspects and extracts cleartext passwords for all saved Wi-Fi profiles stored locally on the host OS.</span>
+                            </div>
+                            <div class="cmd-row">
+                                <span class="cmd-name">> analyse network</span>
+                                <span class="cmd-desc">Triggers passive local beacon scans, logging nearby SSIDs, signal decibel strength, and security protocols.</span>
+                            </div>
+                            <div class="cmd-row">
+                                <span class="cmd-name">> detect mitm</span>
+                                <span class="cmd-desc">Passively sniffs and cross-references active ARP tables to identify active Man-in-the-Middle spoofing attacks.</span>
+                            </div>
+                            <div class="cmd-row">
+                                <span class="cmd-name">> optimize</span>
+                                <span class="cmd-desc">Calculates overlapping channel noise to recommend the cleanest Wi-Fi broadcasting channel.</span>
+                            </div>
+                            <div class="cmd-row">
+                                <span class="cmd-name">> check &lt;email&gt;</span>
+                                <span class="cmd-desc">Performs breach lookup searches to check if email addresses have been compromised in data leaks.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cmd-table-card">
+                        <h3>Active &amp; Diagnostic Commands</h3>
+                        <div class="cmd-table-grid">
+                            <div class="cmd-row">
+                                <span class="cmd-name">> scan ports</span>
+                                <span class="cmd-desc">Fires rapid TCP socket connectors to perform an intense Nmap-style scan of top ports on target IPs.</span>
+                            </div>
+                            <div class="cmd-row">
+                                <span class="cmd-name">> who is connected</span>
+                                <span class="cmd-desc">Sweeps the current subnet using active ARP queries, displaying device MACs, IP leases, and vendor details.</span>
+                            </div>
+                            <div class="cmd-row">
+                                <span class="cmd-name">> geo trace &lt;host&gt;</span>
+                                <span class="cmd-desc">Tracks network route hops and attempts to geolocate routers across routing nodes.</span>
+                            </div>
+                            <div class="cmd-row">
+                                <span class="cmd-name">> subdomain &lt;domain&gt;</span>
+                                <span class="cmd-desc">Discovers hidden web hosts and subdomains by querying a preloaded dictionary of standard endpoints.</span>
+                            </div>
+                            <div class="cmd-row">
+                                <span class="cmd-name">> export html</span>
+                                <span class="cmd-desc">Compiles active session logs and exports a structured, styled HTML analysis dashboard.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Code Showcase -->
+                <div class="wifi-details-right">
+                    <div class="section-badge-header" style="margin-bottom: 24px;">
+                        <span class="badge-num">02</span>
+                        <h2>Fuzzy Matching Engine Source</h2>
+                    </div>
+
+                    <p style="margin-bottom: 20px; font-size: 14px;">The core algorithm powering the toolkit's user-friendly prompt. Located in <code>main.py</code>, it uses <code>difflib.get_close_matches</code> to evaluate typo distances and replaces synonyms on the fly before commands are routed to the executor:</p>
+
+                    <!-- Terminal Mockup -->
+                    <div class="terminal-window">
+                        <div class="terminal-header">
+                            <div class="terminal-dots">
+                                <span class="terminal-dot dot-red"></span>
+                                <span class="terminal-dot dot-yellow"></span>
+                                <span class="terminal-dot dot-green"></span>
+                            </div>
+                            <span class="terminal-title">main.py > fuzzy_match_command</span>
+                        </div>
+                        <pre class="terminal-body"><code><span class="code-keyword">def</span> <span class="code-fn">fuzzy_match_command</span>(cmd):
+    <span class="code-comment">"""Corrects common typos and normalizes synonyms."""</span>
+    <span class="code-keyword">from</span> difflib <span class="code-keyword">import</span> get_close_matches
+    
+    <span class="code-comment"># Core technical keywords mapped to system logic</span>
+    core_commands = [
+        <span class="code-string">"password"</span>, <span class="code-string">"analyse"</span>, <span class="code-string">"analyze"</span>, <span class="code-string">"network"</span>, <span class="code-string">"scan"</span>,
+        <span class="code-string">"port"</span>, <span class="code-string">"ports"</span>, <span class="code-string">"who"</span>, <span class="code-string">"connected"</span>, <span class="code-string">"site"</span>, <span class="code-string">"router"</span>,
+        <span class="code-string">"default"</span>, <span class="code-string">"defaults"</span>, <span class="code-string">"sniff"</span>, <span class="code-string">"wake"</span>, <span class="code-string">"whois"</span>,
+        <span class="code-string">"honeypot"</span>, <span class="code-string">"detect"</span>, <span class="code-string">"mitm"</span>, <span class="code-string">"optimize"</span>, <span class="code-string">"gen"</span>,
+        <span class="code-string">"pass"</span>, <span class="code-string">"dns"</span>, <span class="code-string">"enum"</span>, <span class="code-string">"backup"</span>, <span class="code-string">"wifi"</span>, <span class="code-string">"track"</span>,
+        <span class="code-string">"check"</span>, <span class="code-string">"geo"</span>, <span class="code-string">"trace"</span>, <span class="code-string">"subdomain"</span>, <span class="code-string">"speedtest"</span>,
+        <span class="code-string">"speed"</span>, <span class="code-string">"monitor"</span>, <span class="code-string">"export"</span>, <span class="code-string">"html"</span>, <span class="code-string">"help"</span>,
+        <span class="code-string">"clear"</span>, <span class="code-string">"exit"</span>, <span class="code-string">"quit"</span>, <span class="code-string">"my"</span>, <span class="code-string">"ip"</span>
+    ]
+    
+    <span class="code-comment"># Synonym mapping for intuitive Natural Language input</span>
+    synonyms = {
+        <span class="code-string">"find"</span>: <span class="code-string">"scan"</span>,
+        <span class="code-string">"search"</span>: <span class="code-string">"scan"</span>,
+        <span class="code-string">"probe"</span>: <span class="code-string">"scan"</span>,
+        <span class="code-string">"list"</span>: <span class="code-string">"show"</span>,
+        <span class="code-string">"show"</span>: <span class="code-string">"show"</span>,
+        <span class="code-string">"networks"</span>: <span class="code-string">"network"</span>,
+        <span class="code-string">"wifi"</span>: <span class="code-string">"network"</span>,
+        <span class="code-string">"connections"</span>: <span class="code-string">"connected"</span>,
+        <span class="code-string">"devices"</span>: <span class="code-string">"connected"</span>,
+        <span class="code-string">"speed"</span>: <span class="code-string">"speedtest"</span>,
+        <span class="code-string">"internet"</span>: <span class="code-string">"speedtest"</span>,
+        <span class="code-string">"location"</span>: <span class="code-string">"track"</span>,
+        <span class="code-string">"locate"</span>: <span class="code-string">"track"</span>,
+        <span class="code-string">"where"</span>: <span class="code-string">"track"</span>,
+        <span class="code-string">"breach"</span>: <span class="code-string">"check"</span>,
+        <span class="code-string">"leaks"</span>: <span class="code-string">"check"</span>,
+        <span class="code-string">"hack"</span>: <span class="code-string">"scan"</span>
+    }
+    
+    all_keywords = core_commands + <span class="code-builtin">list</span>(synonyms.keys())
+    words = cmd.lower().split()
+    corrected = []
+    
+    <span class="code-keyword">for</span> word <span class="code-keyword">in</span> words:
+        <span class="code-comment"># 1. Exact match check</span>
+        <span class="code-keyword">if</span> word <span class="code-keyword">in</span> all_keywords:
+            corrected.append(word)
+            <span class="code-keyword">continue</span>
+            
+        <span class="code-comment"># 2. Typos correction (75% similarity threshold)</span>
+        matches = get_close_matches(word, all_keywords, n=<span class="code-builtin">1</span>, cutoff=<span class="code-builtin">0.75</span>)
+        <span class="code-keyword">if</span> matches:
+            corrected.append(matches[<span class="code-builtin">0</span>])
+        <span class="code-keyword">else:</span>
+            <span class="code-comment"># Keep arguments (IPs, domains) as-is</span>
+            corrected.append(word)
+            
+    <span class="code-comment"># 3. Apply Synonym Replacements</span>
+    final_cmd_words = []
+    <span class="code-keyword">for</span> word <span class="code-keyword">in</span> corrected:
+        <span class="code-keyword">if</span> word <span class="code-keyword">in</span> synonyms:
+            final_cmd_words.append(synonyms[word])
+        <span class="code-keyword">else:</span>
+            final_cmd_words.append(word)
+            
+    <span class="code-keyword">return</span> <span class="code-string">" "</span>.join(final_cmd_words)</code></pre>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="neo-footer">
+        <div class="footer-inner">
+            <p>&copy; 2026 Shriram Reddy. All rights reserved.</p>
+            <p class="footer-motto">CURIOUS MIND // SECURE INFRASTRUCTURE</p>
+        </div>
+    </footer>
+
+    <!-- Custom Follow-Along Cursor -->
+    <div class="custom-cursor-circle" id="customCursorCircle">
+        <div class="cursor-circle-inner"></div>
+    </div>
+    <div class="custom-cursor-dot" id="customCursorDot">
+        <div class="cursor-dot-inner"></div>
+    </div>
+
+    <!-- Custom Script -->
+    <script src="script.js"></script>
+</body>
+
+</html>
