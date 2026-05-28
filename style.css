@@ -976,21 +976,22 @@ a {
 .project-app-links {
     margin-top: auto;
     margin-bottom: 20px;
+    padding-top: 30px; /* Reserves room for absolute card hints above the link */
     position: relative;
 }
 
 
-/* ── Card Click Hint: OUTSIDE LEFT (Zero Labs, Wi-Fi, Vibe Player) ── */
-/* Arrow points RIGHT → into the card from outside the left border */
-.card-hint-outside-left {
+/* ── Card Click Hint: INSIDE LEFT (Zero Labs, Wi-Fi, Vibe Player) ── */
+/* Arrow points RIGHT-DOWN ↘ toward the link, label is to the left of arrow */
+.card-hint-inside-left {
     position: absolute;
-    right: calc(100% + 14px);
-    /* sits just outside the left card edge */
-    bottom: 68px;
-    /* vertically aligned with link row area */
+    left: 0;
+    /* sits inside the card aligned with left edge of content */
+    bottom: 28px;
+    /* floats above the link button */
     display: flex;
     flex-direction: row;
-    /* [label] [arrow→] */
+    /* [label] [arrow] */
     align-items: center;
     gap: 7px;
     pointer-events: none;
@@ -999,16 +1000,16 @@ a {
 }
 
 /* ── Card Click Hint: INSIDE RIGHT MIRRORED (SeCom) ── */
-/* Arrow points LEFT ← toward the link, label is to the right of arrow */
+/* Arrow points LEFT-DOWN ↙ toward the link, label is to the right of arrow */
 .card-hint-inside-right {
     position: absolute;
-    right: 30px;
-    /* inside the card, right padding area */
-    bottom: 68px;
-    /* vertically aligned with link row area */
+    right: 0;
+    /* inside the card, aligned to the right edge of content */
+    bottom: 28px;
+    /* floats above the link button */
     display: flex;
     flex-direction: row-reverse;
-    /* [arrow←] [label] — mirrored layout */
+    /* [arrow] [label] — mirrored layout */
     align-items: center;
     gap: 7px;
     pointer-events: none;
@@ -1554,7 +1555,14 @@ a {
    RESPONSIVE LAYOUTS & MOBILE SPACES
    ========================================== */
 @media (max-width: 992px) {
-
+    .hero-avatar-frame {
+        position: relative;
+        left: auto;
+        bottom: auto;
+        width: 240px;
+        height: 220px;
+        margin: 0 auto 30px auto;
+    }
 
     .hero-grid-section {
         grid-template-columns: 1fr;
@@ -1600,6 +1608,12 @@ a {
 }
 
 @media (max-width: 768px) {
+    .hero-avatar-frame {
+        width: 200px;
+        height: 180px;
+        margin: 0 auto 24px auto;
+    }
+
     .top-info-bar {
         flex-direction: column;
         height: auto;
@@ -1661,6 +1675,12 @@ a {
 }
 
 @media (max-width: 576px) {
+    .hero-avatar-frame {
+        width: 160px;
+        height: 150px;
+        margin: 0 auto 20px auto;
+    }
+
     .neo-skills-grid {
         grid-template-columns: 1fr;
     }
